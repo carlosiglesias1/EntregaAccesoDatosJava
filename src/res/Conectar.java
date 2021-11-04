@@ -78,6 +78,10 @@ public class Conectar implements ConnectionPool {
         return password;
     }
 
+    public Conectar getBcp() {
+        return bcp;
+    }
+
     public void shutdown() throws SQLException {
         usedConnections.forEach(this::releaseConnection);
         for (Connection c : connectionPool) {
