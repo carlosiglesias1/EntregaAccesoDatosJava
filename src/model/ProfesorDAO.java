@@ -17,7 +17,8 @@ public class ProfesorDAO implements DAO<Profesor> {
         try (Statement s = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)) {
             String createIfNotExists = "CREATE TABLE IF NOT EXISTS PROFESOR("
                     + "CODPROF INT AUTO_INCREMENT PRIMARY KEY," + "DNI CHAR (9) NOT NULL,"
-                    + "NOMBRE VARCHAR(50) NOT NULL," + "APELLIDOS VARCHAR (100));";
+                    + "NOMBRE VARCHAR(50) NOT NULL," + "APELLIDOS VARCHAR (100), "
+                    + "DEPARTAMENTO REFERENCES DEPT(CODE));";
             return s.execute(createIfNotExists);
         } catch (SQLException e) {
             throw new SQLException();

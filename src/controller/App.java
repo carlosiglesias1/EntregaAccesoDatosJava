@@ -11,8 +11,8 @@ import view.Menu;
 
 public class App {
     static final String URL = "jdbc:mysql:///proyecto";
-    static final String USER = "usuario";
-    static final String PASSWORD = "1234";
+    static final String USER = "root";
+    static final String PASSWORD = "";
 
     private static boolean crearTablas(Connection cnxn) {
         try {
