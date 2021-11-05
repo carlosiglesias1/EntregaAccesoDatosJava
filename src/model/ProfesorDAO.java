@@ -9,10 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProfesorDAO implements DAO<Profesor> {
-    public ProfesorDAO() {
-
-    }
-
     public boolean createTable(Connection conn) throws SQLException {
         try (Statement s = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)) {
             String createIfNotExists = "CREATE TABLE IF NOT EXISTS PROFESOR("

@@ -18,4 +18,28 @@ public class Departamento {
         this.nombre = null;
         this.profesors = null;
     }
+
+    public int getCode() {
+        return code;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public List<Profesor> getProfesors() {
+        return profesors;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public void setProfesors(List<Profesor> profesors) {
+        this.profesors = profesors;
+    }
 }

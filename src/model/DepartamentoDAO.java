@@ -37,8 +37,8 @@ public class DepartamentoDAO implements DAO<Departamento> {
                 int codDEpt = rs.getInt(1);
                 String nombre = rs.getString(2);
                 List<Profesor> profesors = new ArrayList<>();
-                
-                lista.add(new Departamento(/* codDEpt, nombre */));
+
+                lista.add(new Departamento(codDEpt, nombre, profesors));
             }
         } catch (SQLException e) {
             e.printStackTrace();
