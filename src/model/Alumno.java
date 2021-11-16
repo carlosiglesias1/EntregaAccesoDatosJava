@@ -1,26 +1,27 @@
 package model;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class Alumno {
     private int idAlumno;
     private String dni;
     private String nombre;
-    private String apellido1;
-    private String apellido2;
+    private String apellidos;
     private LocalDate birthDate;
+    private List<Asignatura> asignaturas;
 
-    public Alumno(int idAlumno, String dni, String nombre, String apellido1, String apellido2, LocalDate nacimiento) {
+    public Alumno(int idAlumno, String dni, String nombre, String apellidos, LocalDate nacimiento,
+            List<Asignatura> asignaturas) {
         this.idAlumno = idAlumno;
         this.dni = dni;
         this.nombre = nombre;
-        this.apellido1 = apellido1;
-        this.apellido2 = apellido2;
+        this.apellidos = apellidos;
         this.birthDate = nacimiento;
+        this.asignaturas = asignaturas;
     }
 
     public Alumno() {
-
     }
 
     public int getIdAlumno() {
@@ -35,16 +36,16 @@ public class Alumno {
         return nombre;
     }
 
-    public String getApellido1() {
-        return apellido1;
-    }
-
-    public String getApellido2() {
-        return apellido2;
+    public String getApellidos() {
+        return apellidos;
     }
 
     public LocalDate getBirthDate() {
         return birthDate;
+    }
+
+    public List<Asignatura> getAsignaturas() {
+        return asignaturas;
     }
 
     public void setIdAlumno(int idAlumno) {
@@ -59,15 +60,15 @@ public class Alumno {
         this.nombre = nombre;
     }
 
-    public void setApellido1(String apellido1) {
-        this.apellido1 = apellido1;
-    }
-
-    public void setApellido2(String apellido2) {
-        this.apellido2 = apellido2;
+    public void setApellidos(String apellidos) {
+        this.apellidos = apellidos;
     }
 
     public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
+    }
+
+    public void setAsignaturas(List<Asignatura> asignaturas) {
+        this.asignaturas = asignaturas;
     }
 }

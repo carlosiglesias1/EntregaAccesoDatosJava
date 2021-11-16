@@ -8,16 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DepartamentoDAO implements DAO<Departamento> {
-    public boolean createTable(Connection conn) throws SQLException {
-        try (Statement s = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)) {
-            String createIfNotExists = "CREATE TABLE IF NOT EXISTS DEPT(" + "CODDEPT INT AUTO_INCREMENT PRIMARY KEY,"
-                    + "NOMBRE VARCHAR(50) NOT NULL);";
-            return s.execute(createIfNotExists);
-        } catch (SQLException e) {
-            throw new SQLException();
-        }
-    }
-
     @Override
     public Departamento get(long id) {
         return new Departamento();

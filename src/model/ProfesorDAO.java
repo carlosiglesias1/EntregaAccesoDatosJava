@@ -9,18 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProfesorDAO implements DAO<Profesor> {
-    public boolean createTable(Connection conn) throws SQLException {
-        try (Statement s = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)) {
-            String createIfNotExists = "CREATE TABLE IF NOT EXISTS PROFESOR("
-                    + "CODPROF INT AUTO_INCREMENT PRIMARY KEY," + "DNI CHAR (9) NOT NULL,"
-                    + "NOMBRE VARCHAR(50) NOT NULL," + "APELLIDOS VARCHAR (100), "
-                    + "DEPARTAMENTO REFERENCES DEPT(CODE));";
-            return s.execute(createIfNotExists);
-        } catch (SQLException e) {
-            throw new SQLException();
-        }
-    }
-
     @Override
     public Profesor get(long id) {
         return new Profesor();
