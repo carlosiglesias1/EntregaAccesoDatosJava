@@ -2,25 +2,27 @@ package view;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Scanner;
+
+import model.Alumno;
 
 public class Menu {
-    private Menu() {
+    Scanner teclado;
 
+    public Menu() {
+        this.teclado = new Scanner(System.in);
     }
 
-    public static void printPrompt() {
-        System.out.println("Selecciona una opción: \n1.-Genera las tablas\n2.-Operar sobre las tablas\n3.-Borrar las tablas");
+    public void goodBye() {
+        System.out.println("Bye bye");
     }
 
-    public static void printTables(ResultSet rs) throws SQLException {
-        int count = 1;
-        while (rs.next()) {
-            System.out.println(count + ".- " + rs.getString(1));
-            count++;
-        }
-    }
-
-    public static int selectMenu(int option) {
+    public int selectMenu() {
+        System.out.println(
+                "Selecciona una opción: \n1.-Genera las tablas\n2.-Operar sobre las tablas\n3.-Borrar las tablas\n0.-Cierra el programa");
+        int option = Integer.parseInt(this.teclado.nextLine());
         switch (option) {
         case 1:
             System.out.println("Creando tablas...");
@@ -31,13 +33,50 @@ public class Menu {
         case 3:
             System.out.println("Borrando tablas...");
             return 3;
+        case 0:
+            return 0;
         default:
             return -1;
 
         }
     }
 
-    public static void alumnoOPtions(){
-        System.out.println("\t1.-Crear un alumno\n2.-Editar un alumno\n");
+    public int selectTable(ResultSet rs) throws SQLException {
+        int count = 1;
+        while (rs.next()) {
+            System.out.println("\t" + count + ".- " + rs.getString(1));
+            count++;
+        }
+        return Integer.parseInt(teclado.nextLine());
+    }
+
+    public int alumnoOPtions() {
+        System.out.println(
+                "\t1.-Crear un alumno\n\t2.-Editar un alumno\n\t3.-Matricular en una asignatura\n\t4.-Ver alumnos");
+        return Integer.parseInt(this.teclado.nextLine());
+
+    }
+
+    public Alumno inputAlumnoFields() {
+        Alumno alumnoNuevo = new Alumno();
+        alumnoNuevo.setDni(teclado.nextLine());
+        alumnoNuevo.setNombre(teclado.nextLine());
+        alumnoNuevo.setApellidos(teclado.nextLine());
+        alumnoNuevo.setBirthDate(LocalDate.parse(teclado.nextLine()));
+        return alumnoNuevo;
+    }
+
+    public int selectAlumno(List<Alumno> alumnos) {
+        this.showAlumnos(alumnos);
+        return Integer.parseInt(teclado.nextLine());
+    }
+
+    public void showAlumnos(List<Alumno> alumnos) {
+        System.out.println(
+                "ID\t|\tDNI\t|\tNombre\t|\tApellidos\t|\tFechaNac\n______________________________________________________________________");
+        for (Alumno alumno : alumnos) {
+            System.out.println(alumno.toString());
+        }
+        System.out.println();
     }
 }

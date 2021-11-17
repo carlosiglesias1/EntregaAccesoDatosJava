@@ -71,4 +71,10 @@ public class Alumno {
     public void setAsignaturas(List<Asignatura> asignaturas) {
         this.asignaturas = asignaturas;
     }
+
+    @Override
+    public String toString() {
+        return this.idAlumno + "\t|\t" + this.dni + "\t|\t" + this.nombre + "\t|\t" + this.apellidos + "\t|\t"
+                + this.birthDate;
+    }
 }
