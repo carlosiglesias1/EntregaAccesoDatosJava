@@ -64,11 +64,17 @@ public class AlumnoDAO implements DAO<Alumno> {
         }
     }
 
-    public void update (Connection conn){
-        try (PreparedStatement s = conn.prepareStatement("UPDATE ALUMNO SET DNI = ?, NOMBRE = ?, APELLIDOS = ?, FECHA = ? WHERE IDALUMNO = ?")) {
-            
-        } catch (Exception e) {
-            //TODO: handle exception
+    public void update(Connection conn, Alumno alumno) {
+        try (PreparedStatement s = conn.prepareStatement(
+                "UPDATE ALUMNO SET DNI = ?, NOMBRE = ?, APELLIDOS = ?, FECHA = ? WHERE IDALUMNO = ?")) {
+            s.setString(1, alumno.getDni());
+            s.setString(2, alumno.getNombre());
+            s.setString(3, alumno.getApellidos());
+            s.setDate(4, Date.valueOf(alumno.getBirthDate()));
+            s.setInt(5, alumno.getIdAlumno());
+            s.execute();
+        } catch (SQLException e) {
+            System.out.println(e.getSQLState());
         }
     }
 }

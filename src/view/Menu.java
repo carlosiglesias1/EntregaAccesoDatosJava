@@ -68,6 +68,7 @@ public class Menu {
 
     public int selectAlumno(List<Alumno> alumnos) {
         this.showAlumnos(alumnos);
+        System.out.println("Introduce el ID del alumno");
         return Integer.parseInt(teclado.nextLine());
     }
 

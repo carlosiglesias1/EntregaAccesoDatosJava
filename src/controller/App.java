@@ -93,7 +93,9 @@ public class App {
             break;
         case 2:
             int index = menu.selectAlumno(alumnos.getAll(conn));
-            
+            Alumno alumno = menu.inputAlumnoFields();
+            alumno.setIdAlumno(index);
+            alumnos.update(conn, alumno);
             break;
         case 3:
             break;
