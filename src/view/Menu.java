@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import model.Alumno;
+import model.Asignatura;
 
 public class Menu {
     Scanner teclado;
@@ -77,6 +78,25 @@ public class Menu {
                 "ID\t|\tDNI\t|\tNombre\t|\tApellidos\t|\tFechaNac\n______________________________________________________________________");
         for (Alumno alumno : alumnos) {
             System.out.println(alumno.toString());
+        }
+        System.out.println();
+    }
+
+    public void showAsignaturasAlumno(Alumno alumno) {
+        for (Asignatura asignatura : alumno.getAsignaturas()) {
+            System.out.println(asignatura.toString());
+        }
+    }
+
+    public int selectAsignatura(List<Asignatura> asignaturas) {
+        this.showAsignaturas(asignaturas);
+        System.out.println("Introduce una asignatura: ");
+        return Integer.parseInt(teclado.nextLine());
+    }
+
+    public void showAsignaturas(List<Asignatura> asignaturas) {
+        for (Asignatura asignatura : asignaturas) {
+            System.out.println(asignatura.toString());
         }
         System.out.println();
     }

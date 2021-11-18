@@ -4,8 +4,15 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
 import model.Alumno;
 import model.AlumnoDAO;
+import model.AsignaturaDAO;
+import model.Matricula;
+import model.MatriculaDAO;
+import model.Profesor;
 import model.tables.Tables;
 import res.Conectar;
 import view.Menu;
@@ -81,26 +88,40 @@ public class App {
     }
 
     private static void gestionarAlumnos(Connection conn) {
-        AlumnoDAO alumnos = new AlumnoDAO();
+        AlumnoDAO alumnoDAO = new AlumnoDAO();
+        AsignaturaDAO asignaturas = new AsignaturaDAO();
+        List<Alumno> alumnos = alumnoDAO.getAll(conn);
+        int index;
+        int index2;
         switch (menu.alumnoOPtions()) {
         case 1:
             Alumno newAlumno = menu.inputAlumnoFields();
-            if (alumnos.insert(conn, newAlumno)) {
-                for (Alumno alumno : alumnos.getAll(conn)) {
+            if (alumnoDAO.insert(conn, newAlumno)) {
+                for (Alumno alumno : alumnos) {
                     System.out.println(alumno.getDni());
                 }
             }
             break;
         case 2:
-            int index = menu.selectAlumno(alumnos.getAll(conn));
+            index = menu.selectAlumno(alumnos);
             Alumno alumno = menu.inputAlumnoFields();
             alumno.setIdAlumno(index);
-            alumnos.update(conn, alumno);
+            alumnoDAO.update(conn, alumno);
             break;
         case 3:
+            index = menu.selectAlumno(alumnos);
+            if (!asignaturas.getAll(conn).isEmpty()) {
+                index2 = menu.selectAsignatura(asignaturas.getAll(conn));
+                MatriculaDAO mDao = new MatriculaDAO();
+                mDao.insert(conn, new Matricula(-1, index, index2, new Profesor().getCodProf()));
+            }
             break;
         case 4:
-            menu.showAlumnos(alumnos.getAll(conn));
+            menu.showAlumnos(alumnos);
+            break;
+        case 5:
+            index = menu.selectAlumno(alumnos);
+            menu.showAsignaturasAlumno(alumnos.get(index));
             break;
         }
     }

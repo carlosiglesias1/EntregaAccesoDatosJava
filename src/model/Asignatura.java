@@ -5,13 +5,13 @@ public class Asignatura {
     private String nombre;
     private String curso;
 
-    public Asignatura(int code, String nombre, String curso){
+    public Asignatura(int code, String nombre, String curso) {
         this.codAsignatura = code;
         this.nombre = nombre;
         this.curso = curso;
     }
 
-    public Asignatura(){
+    public Asignatura() {
 
     }
 
@@ -37,5 +37,10 @@ public class Asignatura {
 
     public void setCurso(String curso) {
         this.curso = curso;
+    }
+
+    @Override
+    public String toString() {
+        return this.codAsignatura + "\t|\t" + this.nombre + "\t|\t" + this.curso;
     }
 }

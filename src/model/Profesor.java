@@ -14,7 +14,6 @@ public class Profesor {
     }
 
     public Profesor() {
-
     }
 
     public int getCodProf() {
