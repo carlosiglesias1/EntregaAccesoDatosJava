@@ -53,7 +53,7 @@ public class Menu {
 
     public int alumnoOPtions() {
         System.out.println(
-                "\t1.-Crear un alumno\n\t2.-Editar un alumno\n\t3.-Matricular en una asignatura\n\t4.-Ver alumnos");
+                "\t1.-Crear un alumno\n\t2.-Editar un alumno\n\t3.-Matricular en una o varias asignaturas\n\t4.-Ver alumnos");
         return Integer.parseInt(this.teclado.nextLine());
 
     }
