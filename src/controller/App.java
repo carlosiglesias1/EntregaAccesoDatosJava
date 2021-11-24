@@ -8,12 +8,14 @@ import java.util.List;
 
 import model.Alumno;
 import model.AlumnoDAO;
+import model.Asignatura;
 import model.AsignaturaDAO;
 import model.Matricula;
 import model.MatriculaDAO;
 import model.Profesor;
 import model.tables.Tables;
 import res.Conectar;
+import view.Errores;
 import view.Menu;
 
 public class App {
@@ -73,10 +75,13 @@ public class App {
                 gestionarAlumnos(cnxn);
                 break;
             case 2:
-                printDeptOPtions();
+                gestionarAsignaturas(cnxn);
                 break;
             case 3:
-                printProfesorOptions();
+                gestionarDepartamentos(cnxn);
+                break;
+            case 4:
+                gestionarProfesores(cnxn);
                 break;
             default:
                 System.out.println("Fuck");
@@ -84,6 +89,22 @@ public class App {
         } catch (SQLException e) {
             System.out.println(e.getSQLState());
         }
+    }
+
+    private static void gestionarDepartamentos(Connection cnxn) {
+    }
+
+    private static void gestionarAsignaturas(Connection conn) {
+        AsignaturaDAO asignaturaDAO = new AsignaturaDAO();
+        List<Asignatura> asignaturas = asignaturaDAO.getAll(conn);
+        switch (menu.asignaturaOtions()) {
+        case 1:
+
+        }
+    }
+
+    private static void gestionarProfesores(Connection cnxn) {
+
     }
 
     private static void gestionarAlumnos(Connection conn) {
@@ -112,7 +133,22 @@ public class App {
             if (!asignaturas.getAll(conn).isEmpty()) {
                 index2 = menu.selectAsignatura(asignaturas.getAll(conn));
                 MatriculaDAO mDao = new MatriculaDAO();
-                mDao.insert(conn, new Matricula(-1, index, index2, new Profesor().getCodProf()));
+                Matricula[] matriculas = new Matricula[menu.setNumMatriculas()];
+                for (int i = 0; i < matriculas.length; i++) {
+                    matriculas[i] = new Matricula(-1, alumnos.get(index), asignaturas.getAll(conn).get(index2),
+                            new Profesor());
+                }
+                int[] result = mDao.insert(conn, matriculas);
+                for (int i = 0; i < result.length; i++) {
+                    if (result[i] == Statement.EXECUTE_FAILED) {
+                        Errores.ShowError();
+                        break;
+                    }
+                    alumnos.get(i).getAsignaturas().add(matriculas[i].getAsignatura());
+                }
+            } else {
+                Errores.noAsignaturas();
+                // añadir asignatura
             }
             break;
         case 4:
@@ -123,13 +159,6 @@ public class App {
             menu.showAsignaturasAlumno(alumnos.get(index));
             break;
         }
-    }
-
-    private static void printDeptOPtions() {
-    }
-
-    private static void printProfesorOptions() {
-
     }
 
 }

@@ -45,8 +45,10 @@ public class Menu {
     public int selectTable(ResultSet rs) throws SQLException {
         int count = 1;
         while (rs.next()) {
-            System.out.println("\t" + count + ".- " + rs.getString(1));
-            count++;
+            if (!rs.getString(1).equalsIgnoreCase("matricula") && !rs.getString(1).equalsIgnoreCase("viewAll")) {
+                System.out.println("\t" + count + ".- " + rs.getString(1));
+                count++;
+            }
         }
         return Integer.parseInt(teclado.nextLine());
     }
@@ -60,9 +62,13 @@ public class Menu {
 
     public Alumno inputAlumnoFields() {
         Alumno alumnoNuevo = new Alumno();
+        System.out.println("\nIntroduce el dni");
         alumnoNuevo.setDni(teclado.nextLine());
+        System.out.println("\nintroduce el nombre");
         alumnoNuevo.setNombre(teclado.nextLine());
+        System.out.println("\nIntroduce los apellidos");
         alumnoNuevo.setApellidos(teclado.nextLine());
+        System.out.println("\nIntroduce la fecha de nacimiento (AAAA-mm-dd)");
         alumnoNuevo.setBirthDate(LocalDate.parse(teclado.nextLine()));
         return alumnoNuevo;
     }
@@ -88,6 +94,11 @@ public class Menu {
         }
     }
 
+    public int setNumMatriculas() {
+        System.out.println("¿En cuántas asignaturas se va a matricular?");
+        return Integer.parseInt(teclado.nextLine());
+    }
+
     public int selectAsignatura(List<Asignatura> asignaturas) {
         this.showAsignaturas(asignaturas);
         System.out.println("Introduce una asignatura: ");
@@ -99,5 +110,30 @@ public class Menu {
             System.out.println(asignatura.toString());
         }
         System.out.println();
+    }
+
+    public int asignaturaOtions() {
+        System.out.println("\t1.-Dar de alta una asignatura\n\t2.-Borrar asignatura");
+        return Integer.parseInt(this.teclado.nextLine());
+    }
+
+    public Asignatura inputAsignatura() {
+        System.out.println("Introduce un nombre");
+        String nombre = teclado.nextLine();
+        System.out.println("Escoje un curso: \n\t1.-ESO1\t4.-ESO4\n\t2.-ESO2\t5.-BAC1\n\t3.-ESO 3\t6.-BAC2");
+        switch (Integer.parseInt(teclado.nextLine())) {
+        case 1:
+            return new Asignatura(-1, nombre, "ESO1");
+        case 2:
+            return new Asignatura(-1, nombre, "ESO2");
+        case 3:
+            return new Asignatura(-1, nombre, "ESO3");
+        case 4:
+            return new Asignatura(-1, nombre, "ESO4");
+        case 5:
+            return new Asignatura(-1, nombre, "BAC1");
+        default:
+            return new Asignatura(-1, nombre, "BAC2");
+        }
     }
 }
