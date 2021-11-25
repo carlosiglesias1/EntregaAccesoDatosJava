@@ -11,6 +11,7 @@ import model.AsignaturaDAO;
 import model.Matricula;
 import model.MatriculaDAO;
 import model.Profesor;
+import model.ProfesorDAO;
 import view.Errores;
 import view.Menu;
 
@@ -62,15 +63,16 @@ public class AlumnoController {
      * @param alumnos
      * @param asignaturas
      */
-    private static void matricularAlumno(Connection conn, Menu menu, List<Alumno> alumnos,
-            List<Asignatura> asignaturas) {
+    private static void matricularAlumno(Connection conn, Menu menu, List<Alumno> alumnos, List<Asignatura> asignaturas,
+            List<Profesor> profesors) {
         int index = menu.selectAlumno(alumnos);
-        if (!asignaturas.isEmpty()) {
+        if (!asignaturas.isEmpty() && !profesors.isEmpty()) {
             int index2 = menu.selectAsignatura(asignaturas);
             MatriculaDAO mDao = new MatriculaDAO();
             Matricula[] matriculas = new Matricula[menu.setNumMatriculas()];
             for (int i = 0; i < matriculas.length; i++) {
-                matriculas[i] = new Matricula(-1, alumnos.get(index), asignaturas.get(index2), new Profesor());
+                matriculas[i] = new Matricula(-1, alumnos.get(index), asignaturas.get(index2),
+                        profesors.get(menu.selectProfesor(profesors)));
             }
             int[] result = mDao.insert(conn, matriculas);
             for (int i = 0; i < result.length; i++) {
@@ -83,6 +85,8 @@ public class AlumnoController {
         } else {
             if (Errores.noAsignaturas()) {
                 AsignaturaController.crearAsignatura(conn, menu, new AsignaturaDAO());
+                ProfesorController.crearProfesor(conn, menu, new ProfesorDAO());
+                matricularAlumno(conn, menu, alumnos, asignaturas, profesors);
             }
         }
     }
@@ -104,7 +108,8 @@ public class AlumnoController {
             actualizarAlumno(conn, menu, alumnoDAO, alumnoDAO.getAll(conn));
             break;
         case 4:
-            matricularAlumno(conn, menu, alumnoDAO.getAll(conn), new AsignaturaDAO().getAll(conn));
+            matricularAlumno(conn, menu, alumnoDAO.getAll(conn), new AsignaturaDAO().getAll(conn),
+                    new ProfesorDAO().getAll(conn));
             break;
         case 5:
             int index = menu.selectAlumno(alumnoDAO.getAll(conn));

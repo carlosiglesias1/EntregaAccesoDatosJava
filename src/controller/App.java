@@ -4,10 +4,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.List;
-
-import model.Departamento;
-import model.DepartamentoDAO;
 import model.tables.Tables;
 import res.Conectar;
 import view.Errores;
@@ -34,7 +30,7 @@ public class App {
                 AsignaturaController.gestionarAsignaturas(cnxn);
                 break;
             case 3:
-                gestionarDepartamentos(cnxn);
+                DeptController.gestionarDepartamentos(cnxn);
                 break;
             case 4:
                 ProfesorController.gestionarProfesores(cnxn);
@@ -100,37 +96,4 @@ public class App {
             Errores.sqlError(e);
         }
     }
-
-    /**
-     * @param conn
-     */
-    private static void gestionarDepartamentos(Connection conn) {
-        DepartamentoDAO departamentoDAO = new DepartamentoDAO();
-        List<Departamento> depts;
-        switch (menu.departamentoOptions()) {
-        case 1:
-            Departamento dept = menu.inputDepartamento();
-            if (departamentoDAO.insert(conn, dept) != -1) {
-                depts = departamentoDAO.getAll(conn);
-                menu.insertSuccess();
-                menu.showDepts(depts);
-            }
-            break;
-        case 2:
-            depts = departamentoDAO.getAll(conn);
-            Departamento departamento = depts.get(menu.selectDept(depts) - 1);
-            departamentoDAO.delete(conn, departamento);
-            break;
-        case 3:
-            depts = departamentoDAO.getAll(conn);
-            Departamento selectedDept = depts.get(menu.selectDept(depts) - 1);
-            menu.showProfes(selectedDept.getProfesors());
-            break;
-        default:
-            depts = departamentoDAO.getAll(conn);
-            menu.showDepts(depts);
-            break;
-        }
-    }
-
 }
