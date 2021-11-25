@@ -11,11 +11,21 @@ import java.util.List;
 
 public class MatriculaDAO implements DAO<Matricula> {
 
+    
+    /** 
+     * @param id
+     * @return Matricula
+     */
     @Override
     public Matricula get(long id) {
         return new Matricula();
     }
 
+    
+    /** 
+     * @param conn
+     * @return List<Matricula>
+     */
     @Override
     public List<Matricula> getAll(Connection conn) {
         List<Matricula> lista = null;
@@ -36,6 +46,12 @@ public class MatriculaDAO implements DAO<Matricula> {
         return lista;
     }
 
+    
+    /** 
+     * @param conn
+     * @param matriculas
+     * @return int[]
+     */
     public int[] insert(Connection conn, Matricula[] matriculas) {
         try (PreparedStatement s = conn
                 .prepareStatement("INSERT INTO MATRICULA (ALUMNO, ASIGNATURA, PROFESOR) VALUES (?, ?, ?);")) {

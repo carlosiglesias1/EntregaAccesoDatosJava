@@ -11,12 +11,23 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+import view.Errores;
+
 public class AlumnoDAO implements DAO<Alumno> {
+
+    /**
+     * @param id
+     * @return Alumno
+     */
     @Override
     public Alumno get(long id) {
         return new Alumno();
     }
 
+    /**
+     * @param conn
+     * @return List<Alumno>
+     */
     @Override
     public List<Alumno> getAll(Connection conn) {
         List<Alumno> lista = null;
@@ -50,20 +61,29 @@ public class AlumnoDAO implements DAO<Alumno> {
         return lista;
     }
 
-    public boolean insert(Connection conn, Alumno alumno) {
+    /**
+     * @param conn
+     * @param alumno
+     * @return int
+     */
+    public int insert(Connection conn, Alumno alumno) {
         try (PreparedStatement s = conn
                 .prepareStatement("INSERT INTO ALUMNO (DNI, NOMBRE, APELLIDOS, FECHA) VALUES (?, ?, ?, ?);")) {
             s.setString(1, alumno.getDni());
             s.setString(2, alumno.getNombre());
             s.setString(3, alumno.getApellidos());
             s.setDate(4, Date.valueOf(alumno.getBirthDate()));
-            return !s.execute();
+            return s.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getSQLState());
-            return false;
+            return -1;
         }
     }
 
+    /**
+     * @param conn
+     * @param alumno
+     */
     public void update(Connection conn, Alumno alumno) {
         try (PreparedStatement s = conn.prepareStatement(
                 "UPDATE ALUMNO SET DNI = ?, NOMBRE = ?, APELLIDOS = ?, FECHA = ? WHERE IDALUMNO = ?")) {
@@ -72,9 +92,18 @@ public class AlumnoDAO implements DAO<Alumno> {
             s.setString(3, alumno.getApellidos());
             s.setDate(4, Date.valueOf(alumno.getBirthDate()));
             s.setInt(5, alumno.getIdAlumno());
-            s.execute();
+            s.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getSQLState());
+        }
+    }
+
+    public void delete(Connection conn, Alumno alumno) {
+        try (PreparedStatement s = conn.prepareStatement("DELETE FROM ALUMNO WHERE IDALUMNO = ?")) {
+            s.setInt(1, alumno.getIdAlumno());
+            s.executeUpdate();
+        } catch (SQLException e) {
+            Errores.sqlError(e);
         }
     }
 }

@@ -6,13 +6,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
-import model.Alumno;
-import model.AlumnoDAO;
-import model.Asignatura;
-import model.AsignaturaDAO;
-import model.Matricula;
-import model.MatriculaDAO;
-import model.Profesor;
+import model.Departamento;
+import model.DepartamentoDAO;
 import model.tables.Tables;
 import res.Conectar;
 import view.Errores;
@@ -24,6 +19,52 @@ public class App {
     static final String PASSWORD = "1234";
     static Menu menu = new Menu();
 
+    /**
+     * @param cnxn
+     */
+    private static void selectTable(Connection cnxn) {
+        try (Statement st = cnxn.createStatement()) {
+            String sql = "SHOW TABLES;";
+            ResultSet rs = st.executeQuery(sql);
+            switch (menu.selectTable(rs)) {
+            case 1:
+                AlumnoController.gestionarAlumnos(cnxn);
+                break;
+            case 2:
+                AsignaturaController.gestionarAsignaturas(cnxn);
+                break;
+            case 3:
+                gestionarDepartamentos(cnxn);
+                break;
+            case 4:
+                ProfesorController.gestionarProfesores(cnxn);
+                break;
+            default:
+                System.out.println("Fuck");
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getSQLState());
+        }
+    }
+
+    private static void createTables(Connection cnxn) {
+        try {
+            int[] crearTablas = Tables.createTables(cnxn);
+            for (int i = 0; i < crearTablas.length; i++) {
+                if (crearTablas[i] == Statement.EXECUTE_FAILED) {
+                    System.out.println("Algo no ha ido como debería: " + i);
+                    break;
+                }
+            }
+        } catch (SQLException ex) {
+            Errores.sqlError(ex);
+        }
+    }
+
+    /**
+     * @param args
+     * @throws Exception
+     */
     public static void main(String[] args) throws Exception {
         try {
             Conectar connection = Conectar.create(URL, USER, PASSWORD);
@@ -37,13 +78,7 @@ public class App {
                     menu.goodBye();
                     break;
                 case 1:
-                    int[] crearTablas = Tables.createTables(cnxn);
-                    for (int i = 0; i < crearTablas.length; i++) {
-                        if (crearTablas[i] == Statement.EXECUTE_FAILED) {
-                            System.out.println("Algo no ha ido como debería: " + i);
-                            break;
-                        }
-                    }
+                    createTables(cnxn);
                     break;
                 case 2:
                     selectTable(cnxn);
@@ -62,101 +97,38 @@ public class App {
                 }
             } while (option != 0);
         } catch (SQLException e) {
-            System.out.println(e.getSQLState() + ": " + e.getMessage());
+            Errores.sqlError(e);
         }
     }
 
-    private static void selectTable(Connection cnxn) {
-        try (Statement st = cnxn.createStatement()) {
-            String sql = "SHOW TABLES;";
-            ResultSet rs = st.executeQuery(sql);
-            switch (menu.selectTable(rs)) {
-            case 1:
-                gestionarAlumnos(cnxn);
-                break;
-            case 2:
-                gestionarAsignaturas(cnxn);
-                break;
-            case 3:
-                gestionarDepartamentos(cnxn);
-                break;
-            case 4:
-                gestionarProfesores(cnxn);
-                break;
-            default:
-                System.out.println("Fuck");
-            }
-        } catch (SQLException e) {
-            System.out.println(e.getSQLState());
-        }
-    }
-
-    private static void gestionarDepartamentos(Connection cnxn) {
-    }
-
-    private static void gestionarAsignaturas(Connection conn) {
-        AsignaturaDAO asignaturaDAO = new AsignaturaDAO();
-        List<Asignatura> asignaturas = asignaturaDAO.getAll(conn);
-        switch (menu.asignaturaOtions()) {
+    /**
+     * @param conn
+     */
+    private static void gestionarDepartamentos(Connection conn) {
+        DepartamentoDAO departamentoDAO = new DepartamentoDAO();
+        List<Departamento> depts;
+        switch (menu.departamentoOptions()) {
         case 1:
-
-        }
-    }
-
-    private static void gestionarProfesores(Connection cnxn) {
-
-    }
-
-    private static void gestionarAlumnos(Connection conn) {
-        AlumnoDAO alumnoDAO = new AlumnoDAO();
-        AsignaturaDAO asignaturas = new AsignaturaDAO();
-        List<Alumno> alumnos = alumnoDAO.getAll(conn);
-        int index;
-        int index2;
-        switch (menu.alumnoOPtions()) {
-        case 1:
-            Alumno newAlumno = menu.inputAlumnoFields();
-            if (alumnoDAO.insert(conn, newAlumno)) {
-                for (Alumno alumno : alumnos) {
-                    System.out.println(alumno.getDni());
-                }
+            Departamento dept = menu.inputDepartamento();
+            if (departamentoDAO.insert(conn, dept) != -1) {
+                depts = departamentoDAO.getAll(conn);
+                menu.insertSuccess();
+                menu.showDepts(depts);
             }
             break;
         case 2:
-            index = menu.selectAlumno(alumnos);
-            Alumno alumno = menu.inputAlumnoFields();
-            alumno.setIdAlumno(index);
-            alumnoDAO.update(conn, alumno);
+            depts = departamentoDAO.getAll(conn);
+            Departamento departamento = depts.get(menu.selectDept(depts) - 1);
+            departamentoDAO.delete(conn, departamento);
             break;
         case 3:
-            index = menu.selectAlumno(alumnos);
-            if (!asignaturas.getAll(conn).isEmpty()) {
-                index2 = menu.selectAsignatura(asignaturas.getAll(conn));
-                MatriculaDAO mDao = new MatriculaDAO();
-                Matricula[] matriculas = new Matricula[menu.setNumMatriculas()];
-                for (int i = 0; i < matriculas.length; i++) {
-                    matriculas[i] = new Matricula(-1, alumnos.get(index), asignaturas.getAll(conn).get(index2),
-                            new Profesor());
-                }
-                int[] result = mDao.insert(conn, matriculas);
-                for (int i = 0; i < result.length; i++) {
-                    if (result[i] == Statement.EXECUTE_FAILED) {
-                        Errores.ShowError();
-                        break;
-                    }
-                    alumnos.get(i).getAsignaturas().add(matriculas[i].getAsignatura());
-                }
-            } else {
-                Errores.noAsignaturas();
-                // añadir asignatura
-            }
+            depts = departamentoDAO.getAll(conn);
+            Departamento selectedDept = depts.get(menu.selectDept(depts) - 1);
+            menu.showProfes(selectedDept.getProfesors());
             break;
-        case 4:
-            menu.showAlumnos(alumnos);
-            break;
-        case 5:
-            index = menu.selectAlumno(alumnos);
-            menu.showAsignaturasAlumno(alumnos.get(index));
+        default:
+            depts = departamentoDAO.getAll(conn);
+            menu.showDepts(depts);
             break;
         }
     }
