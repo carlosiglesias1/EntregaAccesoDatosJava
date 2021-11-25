@@ -4,10 +4,9 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import model.Alumno;
-import model.AlumnoDAO;
 import model.tables.Tables;
 import res.Conectar;
+import view.Errores;
 import view.Menu;
 
 public class App {
@@ -16,6 +15,52 @@ public class App {
     static final String PASSWORD = "1234";
     static Menu menu = new Menu();
 
+    /**
+     * @param cnxn
+     */
+    private static void selectTable(Connection cnxn) {
+        try (Statement st = cnxn.createStatement()) {
+            String sql = "SHOW TABLES;";
+            ResultSet rs = st.executeQuery(sql);
+            switch (menu.selectTable(rs)) {
+            case 1:
+                AlumnoController.gestionarAlumnos(cnxn);
+                break;
+            case 2:
+                AsignaturaController.gestionarAsignaturas(cnxn);
+                break;
+            case 3:
+                DeptController.gestionarDepartamentos(cnxn);
+                break;
+            case 4:
+                ProfesorController.gestionarProfesores(cnxn);
+                break;
+            default:
+                System.out.println("Fuck");
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getSQLState());
+        }
+    }
+
+    private static void createTables(Connection cnxn) {
+        try {
+            int[] crearTablas = Tables.createTables(cnxn);
+            for (int i = 0; i < crearTablas.length; i++) {
+                if (crearTablas[i] == Statement.EXECUTE_FAILED) {
+                    System.out.println("Algo no ha ido como debería: " + i);
+                    break;
+                }
+            }
+        } catch (SQLException ex) {
+            Errores.sqlError(ex);
+        }
+    }
+
+    /**
+     * @param args
+     * @throws Exception
+     */
     public static void main(String[] args) throws Exception {
         try {
             Conectar connection = Conectar.create(URL, USER, PASSWORD);
@@ -29,13 +74,7 @@ public class App {
                     menu.goodBye();
                     break;
                 case 1:
-                    int[] crearTablas = Tables.createTables(cnxn);
-                    for (int i = 0; i < crearTablas.length; i++) {
-                        if (crearTablas[i] == Statement.EXECUTE_FAILED) {
-                            System.out.println("Algo no ha ido como debería: " + i);
-                            break;
-                        }
-                    }
+                    createTables(cnxn);
                     break;
                 case 2:
                     selectTable(cnxn);
@@ -54,62 +93,7 @@ public class App {
                 }
             } while (option != 0);
         } catch (SQLException e) {
-            System.out.println(e.getSQLState() + ": " + e.getMessage());
+            Errores.sqlError(e);
         }
     }
-
-    private static void selectTable(Connection cnxn) {
-        try (Statement st = cnxn.createStatement()) {
-            String sql = "SHOW TABLES;";
-            ResultSet rs = st.executeQuery(sql);
-            switch (menu.selectTable(rs)) {
-            case 1:
-                gestionarAlumnos(cnxn);
-                break;
-            case 2:
-                printDeptOPtions();
-                break;
-            case 3:
-                printProfesorOptions();
-                break;
-            default:
-                System.out.println("Fuck");
-            }
-        } catch (SQLException e) {
-            System.out.println(e.getSQLState());
-        }
-    }
-
-    private static void gestionarAlumnos(Connection conn) {
-        AlumnoDAO alumnos = new AlumnoDAO();
-        switch (menu.alumnoOPtions()) {
-        case 1:
-            Alumno newAlumno = menu.inputAlumnoFields();
-            if (alumnos.insert(conn, newAlumno)) {
-                for (Alumno alumno : alumnos.getAll(conn)) {
-                    System.out.println(alumno.getDni());
-                }
-            }
-            break;
-        case 2:
-            int index = menu.selectAlumno(alumnos.getAll(conn));
-            Alumno alumno = menu.inputAlumnoFields();
-            alumno.setIdAlumno(index);
-            alumnos.update(conn, alumno);
-            break;
-        case 3:
-            break;
-        case 4:
-            menu.showAlumnos(alumnos.getAll(conn));
-            break;
-        }
-    }
-
-    private static void printDeptOPtions() {
-    }
-
-    private static void printProfesorOptions() {
-
-    }
-
 }
