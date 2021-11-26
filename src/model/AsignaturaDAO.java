@@ -60,6 +60,12 @@ public class AsignaturaDAO implements DAO<Asignatura> {
         }
     }
 
+    
+    /** 
+     * @param conn
+     * @param asignatura
+     * @return int
+     */
     public int update(Connection conn, Asignatura asignatura) {
         try (PreparedStatement s = conn.prepareStatement("UPDATE ASIGNATURA SET NOMBRE =?, CURSO = ?")) {
             s.setString(1, asignatura.getNombre());

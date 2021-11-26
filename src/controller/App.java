@@ -10,9 +10,9 @@ import view.Errores;
 import view.Menu;
 
 public class App {
-    static final String URL = "jdbc:mysql:///proyecto";
-    static final String USER = "usuario";
-    static final String PASSWORD = "1234";
+    static final String URL = "jdbc:mysql://localhost:3306/proyecto";
+    static final String USER = "root";
+    static final String PASSWORD = "";
     static Menu menu = new Menu();
 
     /**
@@ -43,6 +43,10 @@ public class App {
         }
     }
 
+    
+    /** 
+     * @param cnxn
+     */
     private static void createTables(Connection cnxn) {
         try {
             int[] crearTablas = Tables.createTables(cnxn);
@@ -54,6 +58,24 @@ public class App {
             }
         } catch (SQLException ex) {
             Errores.sqlError(ex);
+        }
+    }
+
+    
+    /** 
+     * @param conn
+     */
+    private static void deleteTables(Connection conn) {
+        try {
+            int[] dropTables = Tables.dropTables(conn);
+            for (int i = 0; i < dropTables.length; i++) {
+                if (dropTables[i] == Statement.EXECUTE_FAILED) {
+                    System.out.println("Algo no salió como debería: " + i);
+                    break;
+                }
+            }
+        } catch (SQLException e) {
+            Errores.sqlError(e);
         }
     }
 
@@ -80,13 +102,7 @@ public class App {
                     selectTable(cnxn);
                     break;
                 case 3:
-                    int[] dropTables = Tables.dropTables(cnxn);
-                    for (int i = 0; i < dropTables.length; i++) {
-                        if (dropTables[i] == Statement.EXECUTE_FAILED) {
-                            System.out.println("Algo no salió como debería: " + i);
-                            break;
-                        }
-                    }
+                    deleteTables(cnxn);
                     break;
                 default:
                     System.out.println("Opción incorrecta");

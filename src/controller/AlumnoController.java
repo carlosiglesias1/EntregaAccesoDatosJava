@@ -1,6 +1,7 @@
 package controller;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
@@ -21,6 +22,8 @@ public class AlumnoController {
     }
 
     /**
+     * Llama al método insert del DAO para generar un nuevo alumno
+     * 
      * @param conn
      * @param menu
      * @param alumnoDAO
@@ -34,6 +37,8 @@ public class AlumnoController {
     }
 
     /**
+     * Llama al método delete del DAO para borrar un alumno
+     * 
      * @param conn
      * @param menu
      * @param alumnoDAO
@@ -45,6 +50,9 @@ public class AlumnoController {
     }
 
     /**
+     * Llama al método actualizar del DAO para sobreescribir un alumno en una
+     * posición
+     * 
      * @param conn
      * @param menu
      * @param alumnoDAO
@@ -57,7 +65,30 @@ public class AlumnoController {
         alumnoDAO.update(conn, alumno);
     }
 
+    private static void insertMatricula(Connection conn, Matricula[] matriculas, List<Alumno> alumnos) {
+        try {
+            conn.setAutoCommit(false);
+            int[] result = new MatriculaDAO().insert(conn, matriculas);
+            for (int i = 0; i < result.length; i++) {
+                if (result[i] == Statement.EXECUTE_FAILED) {
+                    Errores.showError(Errores.ErrorTypes.DEFAULT.ordinal());
+                    conn.rollback();
+                    break;
+                }
+                conn.commit();
+                conn.setAutoCommit(true);
+                alumnos.get(i).getAsignaturas().add(matriculas[i].getAsignatura());
+            }
+        } catch (SQLException e) {
+            Errores.sqlError(e);
+        }
+    }
+
     /**
+     * Matricula un alumno en una o varias asignaturas, para esto requiere de la
+     * materia, un alumno y un profesor; sino hay profesores, el sistema recomendará
+     * crear uno
+     * 
      * @param conn
      * @param menu
      * @param alumnos
@@ -67,26 +98,21 @@ public class AlumnoController {
             List<Profesor> profesors) {
         int index = menu.selectAlumno(alumnos);
         if (!asignaturas.isEmpty() && !profesors.isEmpty()) {
-            int index2 = menu.selectAsignatura(asignaturas);
-            MatriculaDAO mDao = new MatriculaDAO();
             Matricula[] matriculas = new Matricula[menu.setNumMatriculas()];
             for (int i = 0; i < matriculas.length; i++) {
-                matriculas[i] = new Matricula(-1, alumnos.get(index), asignaturas.get(index2),
-                        profesors.get(menu.selectProfesor(profesors)));
+                int index2 = menu.selectAsignatura(asignaturas);
+                matriculas[i] = new Matricula(-1, alumnos.get(index - 1), asignaturas.get(index2 - 1),
+                        profesors.get(menu.selectProfesor(profesors) - 1));
             }
-            int[] result = mDao.insert(conn, matriculas);
-            for (int i = 0; i < result.length; i++) {
-                if (result[i] == Statement.EXECUTE_FAILED) {
-                    Errores.ShowError(Errores.ErrorTypes.DEFAULT.ordinal());
-                    break;
-                }
-                alumnos.get(i).getAsignaturas().add(matriculas[i].getAsignatura());
-            }
+            insertMatricula(conn, matriculas, alumnos);
         } else {
-            if (Errores.noAsignaturas()) {
-                AsignaturaController.crearAsignatura(conn, menu, new AsignaturaDAO());
-                ProfesorController.crearProfesor(conn, menu, new ProfesorDAO());
-                matricularAlumno(conn, menu, alumnos, asignaturas, profesors);
+            AsignaturaDAO asignaturaDAO = new AsignaturaDAO();
+            ProfesorDAO profesorDAO = new ProfesorDAO();
+            if (Errores.noAsignaturas(menu.getTeclado())) {
+                AsignaturaController.crearAsignatura(conn, menu, asignaturaDAO);
+                if (Errores.noProfes(menu.getTeclado()))
+                    ProfesorController.crearProfesor(conn, menu, profesorDAO);
+                matricularAlumno(conn, menu, alumnos, asignaturaDAO.getAll(conn), profesorDAO.getAll(conn));
             }
         }
     }

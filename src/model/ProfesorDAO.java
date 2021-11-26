@@ -71,6 +71,12 @@ public class ProfesorDAO implements DAO<Profesor> {
         }
     }
 
+    
+    /** 
+     * @param conn
+     * @param profesor
+     * @return int
+     */
     public int delete(Connection conn, Profesor profesor) {
         try (PreparedStatement s = conn.prepareStatement("DELETE FROM PROFESOR WHERE CODPROF = ?")) {
             s.setInt(1, profesor.getCodProf());
@@ -78,6 +84,49 @@ public class ProfesorDAO implements DAO<Profesor> {
         } catch (SQLException e) {
             Errores.sqlError(e);
             return -1;
+        }
+    }
+
+    
+    /** 
+     * @param conn
+     * @param profesor
+     * @param dept
+     * @return int
+     */
+    public int update(Connection conn, Profesor profesor, Departamento dept) {
+        try (PreparedStatement s = conn.prepareStatement(
+                "UPDATE PROFESOR SET DNI = ?, NOMBRE = ?, APELLIDOS = ?, DEPARTAMENTO = ? WHERE CODPROF = ?;")) {
+            s.setString(1, profesor.getDni());
+            s.setString(2, profesor.getNombre());
+            s.setString(3, profesor.getApellidos());
+            s.setInt(4, dept.getCode());
+            s.setInt(5, profesor.getCodProf());
+            return s.executeUpdate();
+        } catch (SQLException e) {
+            Errores.sqlError(e);
+            return -1;
+        }
+    }
+
+    
+    /** 
+     * @param conn
+     * @param profesor
+     * @return List<Asignatura>
+     */
+    public List<Asignatura> getSubjects(Connection conn, Profesor profesor) {
+        try (PreparedStatement s = conn.prepareStatement("SELECT * FROM ASIGNATURASPROFESOR WHERE CODPROF = ?")) {
+            s.setInt(1, profesor.getCodProf());
+            ResultSet rs = s.executeQuery();
+            ArrayList<Asignatura> asignaturas = new ArrayList<>();
+            while (rs.next()) {
+                asignaturas.add(new Asignatura(rs.getInt(1), rs.getString(2), rs.getString(3)));
+            }
+            return asignaturas;
+        } catch (SQLException e) {
+            Errores.sqlError(e);
+            return new ArrayList<>();
         }
     }
 }

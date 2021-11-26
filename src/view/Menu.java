@@ -19,15 +19,34 @@ public class Menu {
         this.teclado = new Scanner(System.in);
     }
 
+    /**
+     * Obtengo el teclado, este método es útil porque en la clase errores hay un
+     * método que también utiliza un Scanner, y para no dejarlos abiertos, así sólo
+     * instancio 1.
+     * 
+     * @return Scanner
+     */
+    public Scanner getTeclado() {
+        return teclado;
+    }
+
+    /**
+     * Printea éxito de inserción (Orientativo)
+     */
     public void insertSuccess() {
         System.out.println("Insertion succed");
     }
 
+    /**
+     * Mensaje de salida del programa
+     */
     public void goodBye() {
         System.out.println("Bye bye");
     }
 
     /**
+     * Procesa la entrada de la primera interacción con el menú
+     * 
      * @return int
      */
     public int selectMenu() {
@@ -53,6 +72,8 @@ public class Menu {
     }
 
     /**
+     * Permite seleccionar la tabla sobre la que se ejecutarán las consultas
+     * 
      * @param rs
      * @return int
      * @throws SQLException
@@ -60,7 +81,8 @@ public class Menu {
     public int selectTable(ResultSet rs) throws SQLException {
         int count = 1;
         while (rs.next()) {
-            if (!rs.getString(1).equalsIgnoreCase("matricula") && !rs.getString(1).equalsIgnoreCase("viewAll")) {
+            if (!rs.getString(1).equalsIgnoreCase("matricula") && !rs.getString(1).equalsIgnoreCase("viewAll")
+                    && !rs.getString(1).equalsIgnoreCase("countMaterias")) {
                 System.out.println("\t" + count + ".- " + rs.getString(1));
                 count++;
             }
@@ -69,6 +91,8 @@ public class Menu {
     }
 
     /**
+     * Imprimimos las opciones de interacción con la tabla alumnos
+     * 
      * @return int
      */
     public int alumnoOPtions() {
@@ -79,6 +103,8 @@ public class Menu {
     }
 
     /**
+     * Creamos un nuevo Alumno
+     * 
      * @return Alumno
      */
     public Alumno inputAlumnoFields() {
@@ -95,6 +121,8 @@ public class Menu {
     }
 
     /**
+     * Selecciono un alumno de los que hay en la tabla
+     * 
      * @param alumnos
      * @return int
      */
@@ -105,6 +133,8 @@ public class Menu {
     }
 
     /**
+     * Muestro los registros de la tabla alumnos
+     * 
      * @param alumnos
      */
     public void showAlumnos(List<Alumno> alumnos) {
@@ -117,6 +147,8 @@ public class Menu {
     }
 
     /**
+     * Muestro la lista de asignaturas de cada alumno
+     * 
      * @param alumno
      */
     public void showAsignaturasAlumno(Alumno alumno) {
@@ -126,6 +158,8 @@ public class Menu {
     }
 
     /**
+     * Obtengo el número de registros a introducir en la tabla matriculas
+     * 
      * @return int
      */
     public int setNumMatriculas() {
@@ -134,6 +168,8 @@ public class Menu {
     }
 
     /**
+     * Muestro las Asignaturas
+     * 
      * @param asignaturas
      */
     public void showAsignaturas(List<Asignatura> asignaturas) {
@@ -144,6 +180,8 @@ public class Menu {
     }
 
     /**
+     * Muestro las opciones de gestion de las asignaturas
+     * 
      * @return int
      */
     public int asignaturaOtions() {
@@ -152,6 +190,8 @@ public class Menu {
     }
 
     /**
+     * Genera una nueva asignatura lista para ser insertada
+     * 
      * @return Asignatura
      */
     public Asignatura inputAsignatura() {
@@ -175,8 +215,10 @@ public class Menu {
     }
 
     /**
+     * Selecciona una posicion de la lista de asignaturas
+     * 
      * @param asignaturas
-     * @return int
+     * @return posicion de la asignatura seleccionada
      */
     public int selectAsignatura(List<Asignatura> asignaturas) {
         this.showAsignaturas(asignaturas);
@@ -185,6 +227,8 @@ public class Menu {
     }
 
     /**
+     * Imprime las opciones del departamento
+     * 
      * @return int
      */
     public int departamentoOptions() {
@@ -194,6 +238,8 @@ public class Menu {
     }
 
     /**
+     * Crea un nuevo departamento para poder insertarlo en la base de datos
+     * 
      * @return Departamento
      */
     public Departamento inputDepartamento() {
@@ -202,7 +248,9 @@ public class Menu {
     }
 
     /**
-     * @param depts
+     * Muestra los departamentos
+     * 
+     * @param Lista de departamentos
      */
     public void showDepts(List<Departamento> depts) {
         for (Departamento departamento : depts) {
@@ -211,8 +259,10 @@ public class Menu {
     }
 
     /**
-     * @param depts
-     * @return int
+     * Selecciona un departamento de los que hay en la BBDD
+     * 
+     * @param Lista de departamentos
+     * @return posicion del departamento seleccionado
      */
     public int selectDept(List<Departamento> depts) {
         this.showDepts(depts);
@@ -221,7 +271,9 @@ public class Menu {
     }
 
     /**
-     * @param profesors
+     * Muestra la información de la tabla Profesores
+     * 
+     * @param Lista de profesores
      */
     public void showProfes(List<Profesor> profesors) {
         for (Profesor profesor : profesors) {
@@ -230,17 +282,20 @@ public class Menu {
     }
 
     /**
-     * @return int
+     * Muestra las opciones de gestion sobre la tabla de profesores
+     * 
+     * @return Opcion seleccionada
      */
     public int profesorOptions() {
-        System.out.println("1.-Crear profesor\n2.-Eliminar profesor\n3.-Actualizar profesor");
+        System.out.println(
+                "1.-Crear profesor\n2.-Eliminar profesor\n3.-Actualizar profesor\n4.-Ver Asignaturas Profesor\n5.-Ver Profesores");
         return Integer.parseInt(teclado.nextLine());
     }
 
     /**
      * Instancia un nuevo profesor para poderlo insertar en la BBDD
      * 
-     * @return Profesor
+     * @return Profesor con los campos rellenados (todos menos el id)
      */
     public Profesor profesorFields() {
         Profesor profesor = new Profesor();
@@ -253,6 +308,13 @@ public class Menu {
         return profesor;
     }
 
+    /**
+     * Permite seleccionar el profesor
+     * 
+     * @param List<Profesor>
+     * @return int
+     * @return posicion del elemento seleccionado
+     */
     public int selectProfesor(List<Profesor> profesors) {
         showProfes(profesors);
         System.out.println("Selecciona un profesor");

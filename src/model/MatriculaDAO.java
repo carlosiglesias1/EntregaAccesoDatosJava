@@ -11,8 +11,7 @@ import java.util.List;
 
 public class MatriculaDAO implements DAO<Matricula> {
 
-    
-    /** 
+    /**
      * @param id
      * @return Matricula
      */
@@ -21,8 +20,7 @@ public class MatriculaDAO implements DAO<Matricula> {
         return new Matricula();
     }
 
-    
-    /** 
+    /**
      * @param conn
      * @return List<Matricula>
      */
@@ -34,7 +32,8 @@ public class MatriculaDAO implements DAO<Matricula> {
             lista = new ArrayList<>();
             while (rs.next()) {
                 int id = rs.getInt(1);
-                Alumno alumno = new Alumno(rs.getInt(2), rs.getString(3), rs.getString(4), rs.getString(5), LocalDate.parse(rs.getDate(6).toString()), new ArrayList<>());
+                Alumno alumno = new Alumno(rs.getInt(2), rs.getString(3), rs.getString(4), rs.getString(5),
+                        LocalDate.parse(rs.getDate(6).toString()), new ArrayList<>());
                 Asignatura asignatura = new Asignatura(rs.getInt(7), rs.getString(8), rs.getString(9));
                 Profesor profesor = new Profesor(rs.getInt(10), rs.getString(11), rs.getString(12), rs.getString(13));
                 lista.add(new Matricula(id, alumno, asignatura, profesor));
@@ -46,8 +45,7 @@ public class MatriculaDAO implements DAO<Matricula> {
         return lista;
     }
 
-    
-    /** 
+    /**
      * @param conn
      * @param matriculas
      * @return int[]

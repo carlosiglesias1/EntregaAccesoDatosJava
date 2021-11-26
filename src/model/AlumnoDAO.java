@@ -48,7 +48,7 @@ public class AlumnoDAO implements DAO<Alumno> {
                     "SELECT A.CODASIGN, A.NOMBRE, A.CURSO, M.ALUMNO FROM ASIGNATURA A INNER JOIN MATRICULA M ON M.ASIGNATURA = A.CODASIGN GROUP BY M.ALUMNO ORDER BY M.ALUMNO;");
             int idalumno = 0;
             while (rs.next()) {
-                while (idalumno < rs.getInt(4))
+                while (idalumno < rs.getInt(4)-1)
                     idalumno++;
                 int id = rs.getInt(1);
                 String nombre = rs.getString(2);
@@ -98,6 +98,11 @@ public class AlumnoDAO implements DAO<Alumno> {
         }
     }
 
+    
+    /** 
+     * @param conn
+     * @param alumno
+     */
     public void delete(Connection conn, Alumno alumno) {
         try (PreparedStatement s = conn.prepareStatement("DELETE FROM ALUMNO WHERE IDALUMNO = ?")) {
             s.setInt(1, alumno.getIdAlumno());

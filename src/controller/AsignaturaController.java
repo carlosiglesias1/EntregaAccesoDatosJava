@@ -13,11 +13,23 @@ public class AsignaturaController {
         // Empty
     }
 
+    
+    /** 
+     * @param conn
+     * @param menu
+     * @param asignaturaDAO
+     */
     static void crearAsignatura(Connection conn, Menu menu, AsignaturaDAO asignaturaDAO) {
         Asignatura asignatura = menu.inputAsignatura();
         asignaturaDAO.insert(conn, asignatura);
     }
 
+    
+    /** 
+     * @param conn
+     * @param menu
+     * @param asignaturaDAO
+     */
     static void borrarAsignatura(Connection conn, Menu menu, AsignaturaDAO asignaturaDAO) {
         List<Asignatura> asignaturas = asignaturaDAO.getAll(conn);
         try {
@@ -27,10 +39,16 @@ public class AsignaturaController {
                 menu.showAsignaturas(asignaturas);
             }
         } catch (IndexOutOfBoundsException ex) {
-            Errores.ShowError(Errores.ErrorTypes.LOSTMATERIA.ordinal());
+            Errores.showError(Errores.ErrorTypes.LOSTMATERIA.ordinal());
         }
     }
 
+    
+    /** 
+     * @param conn
+     * @param menu
+     * @param asignaturaDAO
+     */
     static void actualizarAsignatura(Connection conn, Menu menu, AsignaturaDAO asignaturaDAO) {
         List<Asignatura> asignaturas = asignaturaDAO.getAll(conn);
         try {
@@ -40,7 +58,7 @@ public class AsignaturaController {
                 menu.showAsignaturas(asignaturas);
             }
         } catch (IndexOutOfBoundsException ex) {
-            Errores.ShowError(Errores.ErrorTypes.LOSTMATERIA.ordinal());
+            Errores.showError(Errores.ErrorTypes.LOSTMATERIA.ordinal());
         }
     }
 
