@@ -27,11 +27,11 @@ public class Tables {
             s.addBatch(
                     "CREATE TABLE IF NOT EXISTS MATRICULA(IDMATRICULA INT AUTO_INCREMENT PRIMARY KEY, ALUMNO INT REFERENCES ALUMNO(IDALUMNO) ON DELETE CASCADE ON UPDATE NO ACTION, ASIGNATURA INT REFERENCES ASIGNATURA(CODASIGN) ON DELETE CASCADE, PROFESOR INT REFERENCES PROFESOR(CODPROF) ON DELETE CASCADE);");
             s.addBatch(
-                    "CREATE VIEW IF NOT EXISTS viewAll AS (   SELECT     idmatricula,     idAlumno,     a.dni as 'dni alumno',     a.nombre as 'Nombre alumno',     a.apellidos,     a.fecha,     codasign,     ag.nombre as 'Nombre asignatura',     curso,     codprof,     p.dni as 'profe dni',     p.nombre as 'Nombre profe',     p.apellidos as 'apellidos profe'   FROM     Matricula m     inner join alumno a on m.alumno = a.idAlumno     inner join asignatura ag on ag.codasign = m.asignatura     inner join profesor p on p.codprof = m.profesor );");
+                    "CREATE VIEW viewAll AS (   SELECT     idmatricula,     idAlumno,     a.dni as 'dni alumno',     a.nombre as 'Nombre alumno',     a.apellidos,     a.fecha,     codasign,     ag.nombre as 'Nombre asignatura',     curso,     codprof,     p.dni as 'profe dni',     p.nombre as 'Nombre profe',     p.apellidos as 'apellidos profe'   FROM     Matricula m     inner join alumno a on m.alumno = a.idAlumno     inner join asignatura ag on ag.codasign = m.asignatura     inner join profesor p on p.codprof = m.profesor );");
             s.addBatch(
-                    "CREATE VIEW IF NOT EXISTS countMaterias AS (SELECT DISTINCT count(*), PROFESOR FROM matricula GROUP BY PROFESOR ORDER BY PROFESOR);");
+                    "CREATE VIEW countMaterias AS (SELECT DISTINCT count(*), PROFESOR FROM matricula GROUP BY PROFESOR ORDER BY PROFESOR);");
             s.addBatch(
-                    "CREATE VIEW IF NOT EXISTS asignaturasProfesor AS (SELECT ag.codasign, ag.nombre, ag.curso, p.codprof, p.dni, p.nombre as 'profName', p.apellidos, p.departamento FROM asignatura ag inner join matricula m on ag.codasign = m.asignatura inner join profesor p on p.codprof = m.profesor);");
+                    "CREATE VIEW asignaturasProfesor AS (SELECT ag.codasign, ag.nombre, ag.curso, p.codprof, p.dni, p.nombre as 'profName', p.apellidos, p.departamento FROM asignatura ag inner join matricula m on ag.codasign = m.asignatura inner join profesor p on p.codprof = m.profesor);");
             return s.executeBatch();
         } catch (SQLException e) {
             throw new SQLException();

@@ -54,19 +54,19 @@ public class Menu {
                 "Selecciona una opción: \n1.-Genera las tablas\n2.-Operar sobre las tablas\n3.-Borrar las tablas\n0.-Cierra el programa");
         int option = Integer.parseInt(this.teclado.nextLine());
         switch (option) {
-        case 1:
-            System.out.println("Creando tablas...");
-            return 1;
-        case 2:
-            System.out.println("Escoje la tabla: ");
-            return 2;
-        case 3:
-            System.out.println("Borrando tablas...");
-            return 3;
-        case 0:
-            return 0;
-        default:
-            return -1;
+            case 1:
+                System.out.println("Creando tablas...");
+                return 1;
+            case 2:
+                System.out.println("Escoje la tabla: ");
+                return 2;
+            case 3:
+                System.out.println("Borrando tablas...");
+                return 3;
+            case 0:
+                return 0;
+            default:
+                return -1;
 
         }
     }
@@ -82,7 +82,8 @@ public class Menu {
         int count = 1;
         while (rs.next()) {
             if (!rs.getString(1).equalsIgnoreCase("matricula") && !rs.getString(1).equalsIgnoreCase("viewAll")
-                    && !rs.getString(1).equalsIgnoreCase("countMaterias")) {
+                    && !rs.getString(1).equalsIgnoreCase("countMaterias")
+                    && !rs.getString(1).equals("asignaturasprofesor")) {
                 System.out.println("\t" + count + ".- " + rs.getString(1));
                 count++;
             }
@@ -121,7 +122,7 @@ public class Menu {
     }
 
     /**
-     * Selecciono un alumno de los que hay en la tabla
+     * Selecciono un alumno de los que hay en la tabla, devuelve -1 en caso de error
      * 
      * @param alumnos
      * @return int
@@ -129,7 +130,12 @@ public class Menu {
     public int selectAlumno(List<Alumno> alumnos) {
         this.showAlumnos(alumnos);
         System.out.println("Introduce el ID del alumno");
-        return Integer.parseInt(teclado.nextLine());
+        String alumno = teclado.nextLine();
+        if (alumno.isEmpty()) {
+            return -1;
+        }else{
+            return Integer.parseInt(alumno);
+        }
     }
 
     /**
@@ -199,18 +205,18 @@ public class Menu {
         String nombre = teclado.nextLine();
         System.out.println("Escoje un curso: \n\t1.-ESO1\t4.-ESO4\n\t2.-ESO2\t5.-BAC1\n\t3.-ESO3\t6.-BAC2");
         switch (Integer.parseInt(teclado.nextLine())) {
-        case 1:
-            return new Asignatura(-1, nombre, "ESO1");
-        case 2:
-            return new Asignatura(-1, nombre, "ESO2");
-        case 3:
-            return new Asignatura(-1, nombre, "ESO3");
-        case 4:
-            return new Asignatura(-1, nombre, "ESO4");
-        case 5:
-            return new Asignatura(-1, nombre, "BAC1");
-        default:
-            return new Asignatura(-1, nombre, "BAC2");
+            case 1:
+                return new Asignatura(-1, nombre, "ESO1");
+            case 2:
+                return new Asignatura(-1, nombre, "ESO2");
+            case 3:
+                return new Asignatura(-1, nombre, "ESO3");
+            case 4:
+                return new Asignatura(-1, nombre, "ESO4");
+            case 5:
+                return new Asignatura(-1, nombre, "BAC1");
+            default:
+                return new Asignatura(-1, nombre, "BAC2");
         }
     }
 

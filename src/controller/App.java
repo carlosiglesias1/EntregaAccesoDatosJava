@@ -10,13 +10,13 @@ import view.Errores;
 import view.Menu;
 
 public class App {
-    static final String URL = "jdbc:mysql://localhost:3306/proyecto";
-    static final String USER = "root";
-    static final String PASSWORD = "";
+    static final String URL = "jdbc:mysql:///proyecto";
+    static final String USER = "usuario";
+    static final String PASSWORD = "1234";
     static Menu menu = new Menu();
 
     /**
-     * @param cnxn
+     * @param Conexion a BD
      */
     private static void selectTable(Connection cnxn) {
         try (Statement st = cnxn.createStatement()) {
