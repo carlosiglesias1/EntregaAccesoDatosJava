@@ -139,7 +139,7 @@ public class AlumnoController {
             break;
         case 5:
             int index = menu.selectAlumno(alumnoDAO.getAll(conn));
-            menu.showAsignaturasAlumno(alumnoDAO.getAll(conn).get(index));
+            menu.showAsignaturasAlumno(alumnoDAO.getAll(conn).get(index-1));
             break;
         default:
             menu.showAlumnos(alumnoDAO.getAll(conn));
