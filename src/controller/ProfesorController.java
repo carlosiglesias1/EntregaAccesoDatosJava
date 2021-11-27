@@ -16,6 +16,8 @@ public class ProfesorController {
 
     
     /** 
+     * Crea un profesor
+     * 
      * @param conn
      * @param menu
      * @param profesorDAO
@@ -30,6 +32,8 @@ public class ProfesorController {
 
     
     /** 
+     * Borra un profesor de la base de datos
+     * 
      * @param conn
      * @param menu
      * @param profesorDAO
@@ -43,7 +47,9 @@ public class ProfesorController {
 
     
     /** 
-     * @param conn
+     * Edita el profesor seleccionado
+     * 
+     * @param conexion
      * @param menu
      * @param profesorDAO
      * @param departamentoDAO
@@ -63,6 +69,8 @@ public class ProfesorController {
 
     
     /** 
+     * Imprime las asignaturas de cada profesor
+     * 
      * @param conn
      * @param menu
      * @param profesorDAO

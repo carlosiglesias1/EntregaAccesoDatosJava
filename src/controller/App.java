@@ -16,6 +16,8 @@ public class App {
     static Menu menu = new Menu();
 
     /**
+     * Permite seleccionar la tabla sobre la que se realizarán las operaciones
+     * 
      * @param Conexion a BD
      */
     private static void selectTable(Connection cnxn) {
@@ -23,29 +25,30 @@ public class App {
             String sql = "SHOW TABLES;";
             ResultSet rs = st.executeQuery(sql);
             switch (menu.selectTable(rs)) {
-            case 1:
-                AlumnoController.gestionarAlumnos(cnxn);
-                break;
-            case 2:
-                AsignaturaController.gestionarAsignaturas(cnxn);
-                break;
-            case 3:
-                DeptController.gestionarDepartamentos(cnxn);
-                break;
-            case 4:
-                ProfesorController.gestionarProfesores(cnxn);
-                break;
-            default:
-                System.out.println("Fuck");
+                case 1:
+                    AlumnoController.gestionarAlumnos(cnxn);
+                    break;
+                case 2:
+                    AsignaturaController.gestionarAsignaturas(cnxn);
+                    break;
+                case 3:
+                    DeptController.gestionarDepartamentos(cnxn);
+                    break;
+                case 4:
+                    ProfesorController.gestionarProfesores(cnxn);
+                    break;
+                default:
+                    System.out.println("Fuck");
             }
         } catch (SQLException e) {
             System.out.println(e.getSQLState());
         }
     }
 
-    
-    /** 
-     * @param cnxn
+    /**
+     * Crea las tablas
+     * 
+     * @param Conexion
      */
     private static void createTables(Connection cnxn) {
         try {
@@ -61,9 +64,10 @@ public class App {
         }
     }
 
-    
-    /** 
-     * @param conn
+    /**
+     * Borra las tablas
+     * 
+     * @param Conexion
      */
     private static void deleteTables(Connection conn) {
         try {
@@ -80,10 +84,11 @@ public class App {
     }
 
     /**
+     * Control principal de la aplicacion
+     * 
      * @param args
-     * @throws Exception
      */
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         try {
             Conectar connection = Conectar.create(URL, USER, PASSWORD);
             Connection cnxn = connection.getConnection();
@@ -92,20 +97,20 @@ public class App {
             do {
                 option = menu.selectMenu();
                 switch (option) {
-                case 0:
-                    menu.goodBye();
-                    break;
-                case 1:
-                    createTables(cnxn);
-                    break;
-                case 2:
-                    selectTable(cnxn);
-                    break;
-                case 3:
-                    deleteTables(cnxn);
-                    break;
-                default:
-                    System.out.println("Opción incorrecta");
+                    case 0:
+                        menu.goodBye();
+                        break;
+                    case 1:
+                        createTables(cnxn);
+                        break;
+                    case 2:
+                        selectTable(cnxn);
+                        break;
+                    case 3:
+                        deleteTables(cnxn);
+                        break;
+                    default:
+                        System.out.println("Opción incorrecta");
                 }
             } while (option != 0);
         } catch (SQLException e) {

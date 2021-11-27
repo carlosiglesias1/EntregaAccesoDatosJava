@@ -13,6 +13,8 @@ import view.Errores;
 public class AsignaturaDAO implements DAO<Asignatura> {
 
     /**
+     * Genera un nuevo alumno
+     * 
      * @param id
      * @return Asignatura
      */
@@ -22,7 +24,9 @@ public class AsignaturaDAO implements DAO<Asignatura> {
     }
 
     /**
-     * @param conn
+     * Recoje todas las asignaturas
+     * 
+     * @param Conexion
      * @return List<Asignatura>
      */
     @Override
@@ -47,7 +51,7 @@ public class AsignaturaDAO implements DAO<Asignatura> {
     /**
      * @param conn
      * @param asignatura
-     * @return int
+     * @return Las filas modificadas o -1 en caso de error
      */
     public int insert(Connection conn, Asignatura asignatura) {
         try (PreparedStatement s = conn.prepareStatement("INSERT INTO ASIGNATURA (NOMBRE, CURSO) VALUES (?, ?);")) {
@@ -60,11 +64,12 @@ public class AsignaturaDAO implements DAO<Asignatura> {
         }
     }
 
-    
-    /** 
+    /**
+     * Actualiza una asignatura
+     * 
      * @param conn
      * @param asignatura
-     * @return int
+     * @return Las filas modificadas o -1 en caso de error
      */
     public int update(Connection conn, Asignatura asignatura) {
         try (PreparedStatement s = conn.prepareStatement("UPDATE ASIGNATURA SET NOMBRE =?, CURSO = ?")) {
@@ -80,7 +85,7 @@ public class AsignaturaDAO implements DAO<Asignatura> {
     /**
      * @param conn
      * @param asignatura
-     * @return int
+     * @return las filas modificadas o -1 en caso de error
      */
     public int delete(Connection conn, Asignatura asignatura) {
         try (PreparedStatement s = conn.prepareStatement("DELETE FROM ASIGNATURA WHERE CODASIGN = ?;")) {

@@ -53,7 +53,7 @@ public class AlumnoController {
      * Llama al método actualizar del DAO para sobreescribir un alumno en una
      * posición
      * 
-     * @param conn
+     * @param Conexion
      * @param menu
      * @param alumnoDAO
      * @param alumnos
@@ -65,6 +65,14 @@ public class AlumnoController {
         alumnoDAO.update(conn, alumno);
     }
 
+    
+    /** 
+     * Inserta una matricula 
+     * 
+     * @param Conexion
+     * @param matriculas
+     * @param alumnos
+     */
     private static void insertMatricula(Connection conn, Matricula[] matriculas, List<Alumno> alumnos) {
         try {
             conn.setAutoCommit(false);
@@ -89,7 +97,7 @@ public class AlumnoController {
      * materia, un alumno y un profesor; sino hay profesores, el sistema recomendará
      * crear uno
      * 
-     * @param conn
+     * @param Conexion
      * @param menu
      * @param alumnos
      * @param asignaturas
@@ -118,7 +126,9 @@ public class AlumnoController {
     }
 
     /**
-     * @param conn
+     * Menu para gestionar los alumnos de la bd
+     * 
+     * @param Conexion
      */
     public static void gestionarAlumnos(Connection conn) {
         Menu menu = new Menu();

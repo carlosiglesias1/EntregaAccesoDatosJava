@@ -15,7 +15,9 @@ public class AsignaturaController {
 
     
     /** 
-     * @param conn
+     * Crea una nueva asignatura
+     * 
+     * @param Conexion
      * @param menu
      * @param asignaturaDAO
      */
@@ -26,6 +28,8 @@ public class AsignaturaController {
 
     
     /** 
+     * Borra una asignatura existente
+     * 
      * @param conn
      * @param menu
      * @param asignaturaDAO
@@ -45,7 +49,9 @@ public class AsignaturaController {
 
     
     /** 
-     * @param conn
+     * Sobreescribe una asignatura existente
+     * 
+     * @param Conexion
      * @param menu
      * @param asignaturaDAO
      */
@@ -63,7 +69,9 @@ public class AsignaturaController {
     }
 
     /**
-     * @param conn
+     * Menu para realizar operaciones sobre la tabla de asignaturas
+     * 
+     * @param Conexion
      */
     public static void gestionarAsignaturas(Connection conn) {
         Menu menu = new Menu();

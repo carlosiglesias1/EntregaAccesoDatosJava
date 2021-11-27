@@ -9,6 +9,8 @@ public class Tables {
     }
 
     /**
+     * Crea las tablas
+     * 
      * @param conn
      * @return int[]
      * @throws SQLException
@@ -39,6 +41,8 @@ public class Tables {
     }
 
     /**
+     * Elimina las tablas
+     * 
      * @param conn
      * @return int[]
      * @throws SQLException

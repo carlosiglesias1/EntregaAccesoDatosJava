@@ -12,6 +12,8 @@ import java.util.List;
 public class MatriculaDAO implements DAO<Matricula> {
 
     /**
+     * Instancia una nueva matricula
+     * 
      * @param id
      * @return Matricula
      */
@@ -21,8 +23,10 @@ public class MatriculaDAO implements DAO<Matricula> {
     }
 
     /**
-     * @param conn
-     * @return List<Matricula>
+     * Obtiene todos los registros de la tabla matriculas
+     * 
+     * @param Conexion
+     * @return Lista con todas las matriculas
      */
     @Override
     public List<Matricula> getAll(Connection conn) {
@@ -46,9 +50,9 @@ public class MatriculaDAO implements DAO<Matricula> {
     }
 
     /**
-     * @param conn
+     * @param Conexion
      * @param matriculas
-     * @return int[]
+     * @return Asrray de enteros con los resultados de insertar las matriculas del alumno
      */
     public int[] insert(Connection conn, Matricula[] matriculas) {
         try (PreparedStatement s = conn
