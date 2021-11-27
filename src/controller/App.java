@@ -10,9 +10,9 @@ import view.Errores;
 import view.Menu;
 
 public class App {
-    static final String URL = "jdbc:mysql:///proyecto";
-    static final String USER = "usuario";
-    static final String PASSWORD = "1234";
+    static final String URL = "jdbc:mysql://localhost:3306/proyecto";
+    static final String USER = "root";
+    static final String PASSWORD = "";
     static Menu menu = new Menu();
 
     /**

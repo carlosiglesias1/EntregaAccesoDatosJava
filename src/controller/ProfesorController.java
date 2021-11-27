@@ -56,7 +56,7 @@ public class ProfesorController {
         if (departamentoDAO.getAll(conn).isEmpty())
             profesorDAO.update(conn, profesor, new Departamento());
         else {
-            Departamento dept = departamentoDAO.getAll(conn).get(menu.selectDept(departamentoDAO.getAll(conn)));
+            Departamento dept = departamentoDAO.getAll(conn).get(menu.selectDept(departamentoDAO.getAll(conn))-1);
             profesorDAO.update(conn, profesor, dept);
         }
     }
